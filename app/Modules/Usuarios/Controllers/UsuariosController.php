@@ -58,17 +58,5 @@ class UsuariosController extends Controller
         return response()->json(['message' => 'Usuário não encontrado'], 404);
     }
 
-    public function resetPassword(Request $request){
-        $validatedData = $request->validate([
-            'email' => 'required|email'
-        ]);
-
-        $senhaAtualizada = $this->usuariosService->resetarSenha($validatedData['email']);
-
-        if($senhaAtualizada){
-            return response()->json(['message' => 'Nova senha enviado por email!', 'usuário' => $senhaAtualizada], 200);
-        } else {
-            return response()->json(['message' => 'Usuário não encontrado'], 404);
-        }
-    }
+    
 }

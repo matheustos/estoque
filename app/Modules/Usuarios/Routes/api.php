@@ -7,12 +7,13 @@ use App\Modules\Usuarios\Controllers\UsuariosController;
 //rotas públicas
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/reset-password', [UsuariosController::class, 'resetPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 //rotas exclusivas para usuários autenticados
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/reset-senha', [AuthController::class, 'resetSenha']);
 });
 
 //rotas exclusivas para administradores

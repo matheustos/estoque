@@ -67,4 +67,16 @@ class UsuariosService
             return $usuario;
         }
     }
+
+    public function resetarSenhaLogado($email, $senha)
+    {
+        $usuario = $this->usuariosRepository->getUsuarioPorEmail($email);
+        if (!$usuario) {
+            return null;
+        }else{
+            $id = $usuario->id;
+            $this->usuariosRepository->updateSenha($id, $senha);
+            return $usuario;
+        }
+    }
 }
