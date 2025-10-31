@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Modules\Produtos\Repositories;
-use App\Modules\Produtos\Models\Produto\Produto;
+use App\Modules\Produtos\Models\Produto;
 
 class ProdutosRepository
 {
@@ -36,6 +36,6 @@ class ProdutosRepository
         if ($produto) {
             return $produto->delete();
         }
-        return false;
+        return null;
     }
 }
