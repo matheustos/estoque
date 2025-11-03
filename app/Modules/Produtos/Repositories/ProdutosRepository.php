@@ -7,12 +7,12 @@ class ProdutosRepository
 {
     public function all()
     {
-        return Produto::all();
+        return Produto::with(['empresa', 'categoria', 'fornecedor'])->get();
     }
 
     public function find($id)
     {
-        return Produto::find($id);
+        return Produto::with(['empresa', 'categoria', 'fornecedor'])->find($id);
     }
 
     public function create(array $data)

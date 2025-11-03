@@ -41,6 +41,7 @@ class ProdutosController extends Controller
             'descricao' => 'nullable|string',
             'preco_custo' => 'required|numeric|min:0',
             'preco_venda' => 'required|numeric|min:0',
+            'fornecedor_id' => 'required|integer|exists:fornecedores,id'
         ]);
 
         $produto = $this->produtosService->criarProduto($validatedData);
