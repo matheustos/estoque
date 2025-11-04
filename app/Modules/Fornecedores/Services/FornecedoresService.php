@@ -37,4 +37,22 @@ class FornecedoresService{
         }
         return null;
     }
+
+    public function updateFornecedor($data, $id){
+        $fornecedor = $this->fornecedoresRepository->atualizaFornecedor($data, $id);
+
+        if($fornecedor){
+            return $fornecedor;
+        }
+        return null;
+    }
+
+    public function deleteFornecedor($id){
+        $fornecedor = $this->fornecedoresRepository->delete($id);
+
+        if(!$fornecedor){
+            return null;
+        }
+        return true;
+    }
 }

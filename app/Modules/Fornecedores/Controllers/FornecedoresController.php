@@ -47,4 +47,31 @@ class FornecedoresController extends Controller
         }
         return response()->json(['message' => 'Erro ao cadastrar fornecedor!'], 500);
     }
+
+    public function update(Request $request, $id){
+        $validatedData = $request->validate([
+            'nome' => 'sometimes|string|max:255',
+            'email' => 'sometimes|string|max:255',
+            'telefone' => 'sometimes|string|max:255',
+            'cidade' => 'sometimes|string|max:100',
+            'compras' => 'sometimes|integer',
+            'status' => 'sometimes|string|max:100'
+        ]);
+
+        $fornecedor = $this->fornecedoresService->updateFornecedor($validatedData, $id);
+
+        if($fornecedor){
+            return response()->json(['message' => 'Fornecedor atualizado com sucesso!', 'fornecedor' => $fornecedor], 200);
+        }
+        return response()->json(['message' => 'Falha ao atualizar fornecedor'], 500);
+    }
+
+    public function destroy($id){
+        $fornecedor = $this->fornecedoresService->deleteFornecedor($id);
+
+        if(!$fornecedor){
+            return response()->json(['message'=> 'Fornecedor não encontrado!'], 404);
+        }
+        return response()->json(['message'=> 'Fornecedor deletado com sucesso!'], 200);
+    }
 }

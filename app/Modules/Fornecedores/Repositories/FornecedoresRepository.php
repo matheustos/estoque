@@ -16,4 +16,23 @@ class FornecedoresRepository{
     public function buscar($id){
         return Fornecedor::find($id);
     }
+
+    public function atualizaFornecedor($data, $id){
+        $fornecedor = Fornecedor::find($id);
+        if(!$fornecedor){
+            return null;
+        }
+        $fornecedor->update($data);
+        return $fornecedor;
+    }
+
+    public function delete($id){
+        $fornecedor = Fornecedor::find($id);
+
+        if(!$fornecedor){
+            return null;
+        }
+        $fornecedor->delete();
+        return true;
+    }
 }
