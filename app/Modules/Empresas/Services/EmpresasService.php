@@ -17,4 +17,40 @@ class EmpresasService{
         }
         return null;
     }
+
+    public function buscarTodas(){
+        $empresas = $this->empresasRepository->all();
+
+        if($empresas){
+            return $empresas;
+        }
+        return null;
+    }
+
+    public function buscarPorId($id){
+        $empresa = $this->empresasRepository->find($id);
+
+        if($empresa){
+            return $empresa;
+        }
+        return null;
+    }
+
+    public function atualizarEmpresa($id, $data){
+        $empresa = $this->empresasRepository->updateEmpresa($id, $data);
+
+        if($empresa){
+            return $empresa;
+        }
+        return null;
+    }
+
+    public function deletarEmpresa($id){
+        $empresa = $this->empresasRepository->delete($id);
+
+        if($empresa){
+            return $empresa;
+        }
+        return null;
+    }
 }
