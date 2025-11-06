@@ -2,6 +2,7 @@
 
 namespace App\Modules\Empresas\Models;
 
+use App\Modules\Almoxarifados\Models\Almoxarifado;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\Produtos\Models\Produto;
 use App\Modules\Usuarios\Models\Usuario;
@@ -29,5 +30,11 @@ class Empresa extends Model
     public function usuarios()
     {
         return $this->hasMany(Usuario::class);
+    }
+
+    // Busca todos os almoxarifados de uma empresa
+    public function almoxarifados()
+    {
+        return $this->hasMany(Almoxarifado::class);
     }
 }
