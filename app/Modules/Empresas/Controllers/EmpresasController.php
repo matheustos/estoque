@@ -46,7 +46,7 @@ class EmpresasController{
 
     public function update($id, Request $request){
         $validateData = $request->validate([
-            'nome' => 'required|string|max:255'
+            'nome' => 'sometimes|string|max:255'
         ]);
 
         $empresa = $this->empresasService->atualizarEmpresa($id, $validateData);

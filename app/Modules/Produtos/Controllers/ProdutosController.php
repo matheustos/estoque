@@ -2,8 +2,11 @@
 
 namespace App\Modules\Produtos\Controllers;
 use App\Http\Controllers\Controller;
+use App\Modules\Fornecedores\Models\Fornecedor;
 use Illuminate\Http\Request;
 use App\Modules\Produtos\Services\ProdutosService;
+use App\Modules\Empresas\Models\Empresa;
+use App\Modules\Categorias\Models\Categoria;
 
 class ProdutosController extends Controller
 {

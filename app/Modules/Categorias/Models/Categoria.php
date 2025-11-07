@@ -15,6 +15,15 @@ class Categoria extends Model
         'nome'
     ];
 
+    protected $hidden = [
+        'empresa_id',
+        'empresa'
+    ];
+
+    protected $appends = [
+        'empresa_nome'
+    ];
+
     /**
      * Relacionamento: Categoria pertence a uma Empresa
      */
@@ -22,6 +31,12 @@ class Categoria extends Model
     {
         return $this->belongsTo(Empresa::class);
     }
+
+    public function getEmpresaNomeAttribute()
+    {
+        return $this->empresa->nome ?? null;
+    }
+
 
     /**
      * Relacionamento: Categoria tem muitos produtos
