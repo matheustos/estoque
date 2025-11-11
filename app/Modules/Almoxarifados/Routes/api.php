@@ -9,7 +9,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 // Rotas protegidas apenas para admins
-Route::middleware('auth:admin')->group(function(){
+Route::middleware(['auth:api', 'role:admin'])->group(function(){
     Route::post('/almoxarifados', [AlmoxarifadosController::class, 'store']);
     Route::get('/almoxarifados', [AlmoxarifadosController::class, 'index']);
     Route::put('/almoxarifados/{id}', [AlmoxarifadosController::class, 'update']);
