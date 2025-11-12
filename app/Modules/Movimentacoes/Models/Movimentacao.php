@@ -1,29 +1,33 @@
 <?php
 
-namespace App\Modules\Estoque\Models;
+namespace App\Modules\Movimentacoes\Models;
+use App\Modules\Usuarios\Models\Usuario;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\Produtos\Models\Produto;
 use App\Modules\Almoxarifados\Models\Almoxarifado;
 
-class Estoque extends Model{
-    protected $table = 'estoque';
+class Movimentacao extends Model{
+    protected $table = 'movimentacoes_estoque';
 
     protected $fillable = [
         'produto_id',
         'almoxarifado_id',
+        'tipo',
         'quantidade',
-        'ultima_atualizacao', 
-        'quantidade_minima'
+        'usuario_id',
+        'data_movimentacao',
+        'motivo'
     ];
 
     protected $hidden = [
         'produto_id',
         'produto',
         'almoxarifado_id',
-        'almoxarifado'
+        'almoxarifado',
+        'usuario_id',
+        'usuario'
     ];
-
-    protected $appends = ['produto_nome', 'almoxarifado_nome'];
+    protected $appends = ['produto_nome', 'almoxarifado_nome', 'usuario_nome'];
 
     public function produto()
     {
@@ -33,6 +37,11 @@ class Estoque extends Model{
     public function almoxarifado()
     {
         return $this->belongsTo(Almoxarifado::class);
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class);
     }
 
     public function getProdutoNomeAttribute()
@@ -45,5 +54,11 @@ class Estoque extends Model{
         return $this->almoxarifado->nome ?? null;
     }
 
+    public function getUsuarioNomeAttribute()
+    {
+        return $this->usuario->nome ?? null;
+    }
+
     public $timestamps = false;
+
 }

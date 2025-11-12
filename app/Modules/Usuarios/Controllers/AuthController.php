@@ -48,7 +48,7 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response()->json(JWTAuth::user());
+        return response()->json(JWTAuth::user()->id);
     }
 
     public function logout()

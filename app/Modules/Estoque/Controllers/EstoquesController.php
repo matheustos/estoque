@@ -33,7 +33,8 @@ class EstoquesController extends Controller{
         $validateData = $request->validate([
             'produto_id' => 'required|integer|exists:produtos,id',
             'almoxarifado_id' => 'required|integer|exists:almoxarifados,id',
-            'quantidade' => 'required|integer|  max:255'
+            'quantidade' => 'required|integer|max:255',
+            'quantidade_minima' => 'required|integer|max:255'
         ]);
 
         date_default_timezone_set('America/Sao_Paulo'); // define o fuso horário
