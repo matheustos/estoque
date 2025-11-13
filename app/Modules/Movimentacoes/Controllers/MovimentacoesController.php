@@ -67,7 +67,7 @@ class MovimentacoesController{
 
     public function update(Request $request, $id){
         $validateData = $request->validate([
-            'produto_id' => 'sometimes|integer|exists:produtos,id',
+            'produto_id' => 'required|integer|exists:produtos,id',
             'almoxarifado_id' => 'sometimes|integer|exists:almoxarifados,id',
             'tipo' => 'required|string|max:255',
             'quantidade' => 'sometimes|integer|max:255',
@@ -78,6 +78,19 @@ class MovimentacoesController{
         if($validateData['tipo'] != 'ajuste'){
             return response()->json(['success'=> false, 'message' => 'Para editar uma movimentação, faça um ajuste manual!']);
         }
+
+        $estoque = Estoque::where('produto_id', $validateData['produto_id'] ?? null)
+            ->lockForUpdate()
+            ->first();
+        $saldo = $estoque->quantidade;
+
+        if($validateData['quantidade'] < 0){
+            if($saldo + $validateData['quantidade'] < 0){
+                return response()->json(['success' => false, 'message' => 'A quantidade não pode ser superior ao estoque!'], 500);
+            }
+        }
+        $usuarioId = JWTAuth::user()->id;
+        $validateData['usuario_id'] = $usuarioId;
 
         $movimentacao = $this->movimentacoesService->atualizarMovimentacao($id, $validateData);
 

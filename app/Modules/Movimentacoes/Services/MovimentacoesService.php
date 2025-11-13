@@ -53,6 +53,14 @@ class MovimentacoesService{
     }
 
     public function atualizarMovimentacao($id, $data){
+        $estoque = Estoque::where('produto_id', $data['produto_id'] ?? null)
+            ->lockForUpdate()
+            ->first();
+        $saldoAntes = $estoque->quantidade;
+        $saldoDepois = $saldoAntes + $data['quantidade'];
+        $estoque->update([
+            'quantidade' => $saldoDepois,
+        ]);
         $movimentacao = $this->movimentacoesRepository->atualizar($id, $data);
 
         if($movimentacao){
