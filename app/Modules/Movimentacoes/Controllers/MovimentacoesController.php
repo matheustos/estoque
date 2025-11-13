@@ -84,7 +84,9 @@ class MovimentacoesController{
             ->first();
         $saldo = $estoque->quantidade;
 
+        // se quantidade da movimentação for negativa
         if($validateData['quantidade'] < 0){
+            // verifica se a diferença do saldo atual e a quantidade que saiu é menor que zero
             if($saldo + $validateData['quantidade'] < 0){
                 return response()->json(['success' => false, 'message' => 'A quantidade não pode ser superior ao estoque!'], 500);
             }
