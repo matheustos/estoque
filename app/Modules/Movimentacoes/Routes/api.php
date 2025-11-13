@@ -6,8 +6,8 @@ use App\Modules\Movimentacoes\Controllers\MovimentacoesController;
 // Rotas protegidas por autenticação
 Route::middleware('auth:api')->group(function () {
     Route::post('/movimentacoes', [MovimentacoesController::class, 'store']);
-    //Route::get('/estoque', [EstoquesController::class, 'index']);
-    //Route::get('/estoque/{id}', [EstoquesController::class, 'show']);
-    //Route::put('/estoque/{id}', [EstoquesController::class, 'update']);
-    //Route::delete('/estoque/{id}', [EstoquesController::class, 'destroy']);
+    Route::get('/movimentacoes', [MovimentacoesController::class, 'index']);
+    Route::get('/movimentacoes/{id}', [MovimentacoesController::class, 'show']);
+    Route::put('/movimentacoes/{id}', [MovimentacoesController::class, 'update']);
+    Route::delete('/movimentacoes/{id}', [MovimentacoesController::class, 'destroy']);
 });

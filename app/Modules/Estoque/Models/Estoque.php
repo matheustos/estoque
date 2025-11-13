@@ -23,7 +23,14 @@ class Estoque extends Model{
         'almoxarifado'
     ];
 
-    protected $appends = ['produto_nome', 'almoxarifado_nome'];
+    protected $appends = [
+        'produto_nome',
+        'almoxarifado_nome',
+        'categoria_nome',
+        'fornecedor_nome',
+        'preco_custo',
+        'preco_venda'
+    ];
 
     public function produto()
     {
@@ -35,14 +42,40 @@ class Estoque extends Model{
         return $this->belongsTo(Almoxarifado::class);
     }
 
+    // NOME DO PRODUTO
     public function getProdutoNomeAttribute()
     {
-        return $this->produto->nome ?? null;
+        return $this->produto?->nome;
     }
 
+    // NOME DA CATEGORIA
+    public function getCategoriaNomeAttribute()
+    {
+        return $this->produto?->categoria?->nome;
+    }
+
+    // NOME DO FORNECEDOR
+    public function getFornecedorNomeAttribute()
+    {
+        return $this->produto?->fornecedor?->nome;
+    }
+
+    // PREÇO DE CUSTO
+    public function getPrecoCustoAttribute()
+    {
+        return $this->produto?->preco_custo;
+    }
+
+    // PREÇO DE VENDA
+    public function getPrecoVendaAttribute()
+    {
+        return $this->produto?->preco_venda;
+    }
+
+    // NOME DO ALMOXARIFADO
     public function getAlmoxarifadoNomeAttribute()
     {
-        return $this->almoxarifado->nome ?? null;
+        return $this->almoxarifado?->nome;
     }
 
     public $timestamps = false;
