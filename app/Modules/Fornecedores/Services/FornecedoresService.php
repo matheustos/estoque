@@ -38,6 +38,30 @@ class FornecedoresService{
         return null;
     }
 
+    public function todosFornecedores(){
+        $fornecedores = $this->fornecedoresRepository->fornecedoresGeral();
+
+        return $fornecedores;
+    }
+
+    public function fornecedoresAtivo(){
+        $fornecedores = $this->fornecedoresRepository->ativos();
+
+        return $fornecedores;
+    }
+
+    public function fornecedoresInativo(){
+        $fornecedores = $this->fornecedoresRepository->inativos();
+
+        return $fornecedores;
+    }
+
+    public function fornecedoresFavoritos(){
+        $fornecedores = $this->fornecedoresRepository->favoritos();
+
+        return $fornecedores;
+    }
+
     public function updateFornecedor($data, $id){
         $fornecedor = $this->fornecedoresRepository->atualizaFornecedor($data, $id);
 

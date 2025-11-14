@@ -22,6 +22,15 @@ class FornecedoresController extends Controller
         return response()->json(['message' => 'Nenhum fornecedor encontrado'], 404);
     }
 
+    public function quantidadeFornecedores(){
+        $fornecedoresGeral = $this->fornecedoresService->todosFornecedores();
+        $fornecedoresAtivo = $this->fornecedoresService->fornecedoresAtivo();
+        $fornecedoresInativo = $this->fornecedoresService->fornecedoresInativo();
+        $fornecedoresFavoritos = $this->fornecedoresService->fornecedoresFavoritos();
+
+        return response()->json(['success' => true, 'total_fornecedores' => $fornecedoresGeral, 'fornecedores_ativos' => $fornecedoresAtivo, 'fornecedores_inativos' => $fornecedoresInativo, 'fornecedores_favoritos' => $fornecedoresFavoritos], 200);
+    }
+
     public function show($id){
         $fornecedor = $this->fornecedoresService->buscarFornecedor($id);
         if($fornecedor){
@@ -37,8 +46,12 @@ class FornecedoresController extends Controller
             'telefone' => 'required|string|max:255',
             'cidade' => 'required|string|max:100',
             'compras' => 'nullable|integer',
-            'status' => 'required|string|max:100'
+            'status' => 'nullable|boolean',
+            'favorito' => 'nullable|boolean'
         ]);
+
+        $validatedData['status'] = $request->boolean('status');
+        $validatedData['favorito'] = $request->boolean('favorito');
 
         $fornecedor = $this->fornecedoresService->cadastrarForncedores($validatedData);
 

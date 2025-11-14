@@ -17,6 +17,30 @@ class FornecedoresRepository{
         return Fornecedor::find($id);
     }
 
+    public function fornecedoresGeral(){
+        $total = Fornecedor::count();
+
+        return $total;
+    }
+
+    public function ativos(){
+        $total = Fornecedor::where('status', true)->count();
+
+        return $total;
+    }
+
+    public function inativos(){
+        $total = Fornecedor::where('status', false)->count();
+
+        return $total;
+    }
+
+    public function favoritos(){
+        $total = Fornecedor::where('favorito', true)->count();
+
+        return $total;
+    }
+
     public function atualizaFornecedor($data, $id){
         $fornecedor = Fornecedor::find($id);
         if(!$fornecedor){

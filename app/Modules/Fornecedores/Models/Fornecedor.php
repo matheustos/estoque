@@ -14,6 +14,7 @@ class Fornecedor extends Model
         'telefone',
         'cidade',
         'compras',
-        'status'
+        'status',
+        'favorito'
     ];
 }
