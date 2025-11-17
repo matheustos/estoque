@@ -2,6 +2,7 @@
 
 namespace App\Modules\Produtos\Repositories;
 use App\Modules\Produtos\Models\Produto;
+use App\Modules\Estoque\Models\Estoque;
 
 class ProdutosRepository
 {
@@ -18,6 +19,18 @@ class ProdutosRepository
     public function create(array $data)
     {
         return Produto::create($data);
+    }
+
+    public function produtosGeral(){
+        $total = Produto::count();
+
+        return $total;
+    }
+
+    public function falta(){
+        $total = Estoque::where('quantidade', 0)->count();
+
+        return $total;
     }
 
     public function update($id, array $data)

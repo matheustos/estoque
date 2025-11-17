@@ -25,9 +25,11 @@ class Movimentacao extends Model{
         'almoxarifado_id',
         'almoxarifado',
         'usuario_id',
-        'usuario'
+        'usuario',
+        'created_at',
+        'updated_at'
     ];
-    protected $appends = ['produto_nome', 'almoxarifado_nome', 'usuario_nome'];
+    protected $appends = ['produto_nome', 'almoxarifado_nome', 'usuario_nome', 'produto_sku'];
 
     public function produto()
     {
@@ -47,6 +49,11 @@ class Movimentacao extends Model{
     public function getProdutoNomeAttribute()
     {
         return $this->produto->nome ?? null;
+    }
+
+    public function getProdutoSkuAttribute()
+    {
+        return $this->produto->sku ?? null;
     }
 
     public function getAlmoxarifadoNomeAttribute()

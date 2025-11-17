@@ -2,19 +2,19 @@
 
 namespace App\Modules\Produtos\Controllers;
 use App\Http\Controllers\Controller;
-use App\Modules\Fornecedores\Models\Fornecedor;
 use Illuminate\Http\Request;
 use App\Modules\Produtos\Services\ProdutosService;
-use App\Modules\Empresas\Models\Empresa;
-use App\Modules\Categorias\Models\Categoria;
+use App\Modules\Estoque\Services\EstoquesService;
 
 class ProdutosController extends Controller
 {
     protected $produtosService;
+    protected $estoquesService;
 
-    public function __construct(ProdutosService $produtosService)
+    public function __construct(ProdutosService $produtosService, EstoquesService $estoquesService)
     {
         $this->produtosService = $produtosService;
+        $this->estoquesService = $estoquesService;
     }
     public function index()
     {
@@ -44,12 +44,24 @@ class ProdutosController extends Controller
             'descricao' => 'nullable|string',
             'preco_custo' => 'required|numeric|min:0',
             'preco_venda' => 'required|numeric|min:0',
-            'fornecedor_id' => 'required|integer|exists:fornecedores,id'
+            'fornecedor_id' => 'required|integer|exists:fornecedores,id',
+            'almoxarifado_id' => 'required|integer|exists:almoxarifados,id',
+            'quantidade' =>'required|integer|max:100',
+            'quantidade_minima' =>'required|integer|max:100'
         ]);
 
         $produto = $this->produtosService->criarProduto($validatedData);
 
         if($produto) {
+            $data = [];
+            date_default_timezone_set('America/Sao_Paulo'); // define o fuso horário
+            $dataHora = date('Y-m-d H:i:s'); // formato: 2025-11-11 11:30:45
+            $data['ultima_atualizacao'] = $dataHora;
+            $data['produto_id'] = $produto->id;
+            $data['almoxarifado_id'] = $validatedData['almoxarifado_id'];
+            $data['quantidade'] = $validatedData['quantidade'];
+            $data['quantidade_minima'] = $validatedData['quantidade_minima'];
+            $this->estoquesService->cadastrarEstoque($data);
             return response()->json(['message' => 'Produto criado com sucesso', 'produto' => $produto], 201);
         } else {
             return response()->json(['message' => 'Erro ao criar produto'], 500);

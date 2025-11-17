@@ -20,16 +20,20 @@ class Estoque extends Model{
         'produto_id',
         'produto',
         'almoxarifado_id',
-        'almoxarifado'
+        'almoxarifado',
+        'quantidade_minima',
+        'ultima_atualizacao'
     ];
 
     protected $appends = [
         'produto_nome',
+        'produto_sku',
         'almoxarifado_nome',
         'categoria_nome',
         'fornecedor_nome',
         'preco_custo',
-        'preco_venda'
+        'preco_venda',
+        'status'
     ];
 
     public function produto()
@@ -46,6 +50,11 @@ class Estoque extends Model{
     public function getProdutoNomeAttribute()
     {
         return $this->produto?->nome;
+    }
+
+    public function getProdutoSkuAttribute()
+    {
+        return $this->produto?->sku;
     }
 
     // NOME DA CATEGORIA
@@ -76,6 +85,16 @@ class Estoque extends Model{
     public function getAlmoxarifadoNomeAttribute()
     {
         return $this->almoxarifado?->nome;
+    }
+
+    // ACESSOR DE STATUS
+    public function getStatusAttribute()
+    {
+        if ($this->quantidade < $this->quantidade_minima) {
+            return 'Estoque baixo';
+        }
+
+        return 'Normal';
     }
 
     public $timestamps = false;
