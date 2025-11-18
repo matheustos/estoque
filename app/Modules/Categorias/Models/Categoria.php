@@ -5,6 +5,7 @@ namespace App\Modules\Categorias\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\Produtos\Models\Produto;
 use App\Modules\Empresas\Models\Empresa;
+use Carbon\Carbon;
 
 class Categoria extends Model
 {
@@ -44,5 +45,19 @@ class Categoria extends Model
     public function produtos()
     {
         return $this->hasMany(Produto::class);
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)
+            ->timezone('America/Sao_Paulo')
+            ->format('Y-m-d H:i:s');
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)
+            ->timezone('America/Sao_Paulo')
+            ->format('Y-m-d H:i:s');
     }
 }

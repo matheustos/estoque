@@ -3,6 +3,7 @@
 namespace App\Modules\Fornecedores\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Fornecedor extends Model
 {
@@ -17,4 +18,23 @@ class Fornecedor extends Model
         'status',
         'favorito'
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+        'favorito' => 'boolean',
+    ];
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)
+            ->timezone('America/Sao_Paulo')
+            ->format('Y-m-d H:i:s');
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)
+            ->timezone('America/Sao_Paulo')
+            ->format('Y-m-d H:i:s');
+    }
 }

@@ -6,6 +6,7 @@ use App\Modules\Almoxarifados\Models\Almoxarifado;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\Produtos\Models\Produto;
 use App\Modules\Usuarios\Models\Usuario;
+use Carbon\Carbon;
 
 class Empresa extends Model
 {
@@ -37,4 +38,6 @@ class Empresa extends Model
     {
         return $this->hasMany(Almoxarifado::class);
     }
+
+    public $timestamps = false;
 }

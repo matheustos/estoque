@@ -5,6 +5,7 @@ use App\Modules\Usuarios\Models\Usuario;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\Produtos\Models\Produto;
 use App\Modules\Almoxarifados\Models\Almoxarifado;
+use App\Modules\Fornecedores\Models\Fornecedor;
 
 class Movimentacao extends Model{
     protected $table = 'movimentacoes_estoque';
@@ -16,12 +17,16 @@ class Movimentacao extends Model{
         'quantidade',
         'usuario_id',
         'data_movimentacao',
-        'motivo'
+        'motivo',
+        'fornecedor_id',
+        'observacoes'
     ];
 
     protected $hidden = [
         'produto_id',
         'produto',
+        'fornecedor_id',
+        'fornecedor',
         'almoxarifado_id',
         'almoxarifado',
         'usuario_id',
@@ -29,7 +34,7 @@ class Movimentacao extends Model{
         'created_at',
         'updated_at'
     ];
-    protected $appends = ['produto_nome', 'almoxarifado_nome', 'usuario_nome', 'produto_sku'];
+    protected $appends = ['produto_nome', 'almoxarifado_nome', 'usuario_nome', 'produto_sku', 'fornecedor_nome'];
 
     public function produto()
     {
@@ -44,6 +49,11 @@ class Movimentacao extends Model{
     public function usuario()
     {
         return $this->belongsTo(Usuario::class);
+    }
+
+    public function fornecedor()
+    {
+        return $this->belongsTo(Fornecedor::class);
     }
 
     public function getProdutoNomeAttribute()
@@ -64,6 +74,11 @@ class Movimentacao extends Model{
     public function getUsuarioNomeAttribute()
     {
         return $this->usuario->nome ?? null;
+    }
+
+    public function getFornecedorNomeAttribute()
+    {
+        return $this->fornecedor->nome ?? null;
     }
 
     public $timestamps = false;

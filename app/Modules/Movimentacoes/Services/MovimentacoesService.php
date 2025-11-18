@@ -3,6 +3,7 @@
 namespace App\Modules\Movimentacoes\Services;
 use App\Modules\Movimentacoes\Repositories\MovimentacoesRepository;
 use App\Modules\Estoque\Models\Estoque;
+use App\Modules\Fornecedores\Models\Fornecedor;
 
 class MovimentacoesService{
     protected $movimentacoesRepository;
@@ -37,6 +38,11 @@ class MovimentacoesService{
         if($data['tipo'] === 'entrada'){
             $saldoDepois = $saldoAntes + $data['quantidade'];
             $estoque->update(['quantidade' => $saldoDepois]);
+            // se for entrada, atualiza o campo compras do fornecedor
+            $fornecedor = Fornecedor::find($data['fornecedor_id'] ?? null);
+            if($fornecedor){
+                $fornecedor->increment('compras', $data['quantidade']);
+            }
         }
 
         if($data['tipo'] === 'saida'){

@@ -5,7 +5,6 @@ use App\Modules\Movimentacoes\Services\MovimentacoesService;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Modules\Estoque\Models\Estoque;
-use App\Modules\Estoque\Controllers\EstoquesController;
 
 class MovimentacoesController{
     protected $movimentacoesService;
@@ -36,6 +35,7 @@ class MovimentacoesController{
         $validateData = $request->validate([
             'produto_id' => 'required|integer|exists:produtos,id',
             'almoxarifado_id' => 'required|integer|exists:almoxarifados,id',
+            'fornecedor_id' => 'required|integer|exists:fornecedores,id',
             'tipo' => 'required|string|max:255',
             'quantidade' => 'required|integer|max:255',
             'motivo' => 'required|string|max:255',

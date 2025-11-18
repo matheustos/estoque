@@ -20,18 +20,18 @@ class ProdutosController extends Controller
     {
         $produtos = $this->produtosService->getAllProdutos();
         if(!$produtos) {
-            return response()->json(['message' => 'Nenhum produto encontrado'], 404);
+            return response()->json(['success' => false, 'message' => 'Nenhum produto encontrado'], 404);
         }
-        return response()->json(['message' => 'Produtos encontrados:', 'produtos'=> $produtos]);
+        return response()->json(['success' => true, 'message' => 'Produtos encontrados:', 'produtos'=> $produtos]);
     }
 
     public function show($id)
     {
         $produtos = $this->produtosService->getProduto($id);
         if(!$produtos) {
-            return response()->json(['message' => 'Nenhum produto encontrado'], 404);
+            return response()->json(['success' => false, 'message' => 'Nenhum produto encontrado'], 404);
         }
-        return response()->json(['message' => 'Produto encontrado:', 'produto'=> $produtos]);
+        return response()->json(['success' => true, 'message' => 'Produto encontrado:', 'produto'=> $produtos]);
     }
 
     public function store(Request $request)
@@ -62,9 +62,9 @@ class ProdutosController extends Controller
             $data['quantidade'] = $validatedData['quantidade'];
             $data['quantidade_minima'] = $validatedData['quantidade_minima'];
             $this->estoquesService->cadastrarEstoque($data);
-            return response()->json(['message' => 'Produto criado com sucesso', 'produto' => $produto], 201);
+            return response()->json(['success' => true, 'message' => 'Produto criado com sucesso', 'produto' => $produto], 201);
         } else {
-            return response()->json(['message' => 'Erro ao criar produto'], 500);
+            return response()->json(['success' => false, 'message' => 'Erro ao criar produto'], 500);
         }
     }
 
@@ -73,6 +73,7 @@ class ProdutosController extends Controller
         $validatedData = $request->validate([
             'empresa_id' => 'sometimes|integer|exists:empresas,id',
             'categoria_id' => 'sometimes|integer|exists:categorias,id',
+            'fornecedor_id' => 'sometimes|integer|exists:fornecedores,id',
             'nome' => 'sometimes|string|max:255',
             'sku' => 'sometimes|string|max:100|unique:produtos,sku',
             'descricao' => 'nullable|string',
@@ -83,9 +84,9 @@ class ProdutosController extends Controller
         $produto = $this->produtosService->updateProduto($validatedData, $id);
 
         if($produto){
-            return response()->json(['message' => 'Produto atualizado com sucesso!', 'produto' => $produto]);
+            return response()->json(['success' => true, 'message' => 'Produto atualizado com sucesso!', 'produto' => $produto]);
         }
-        return response()->json(['message' => 'Produto não encontrado!']);
+        return response()->json(['success' => false, 'message' => 'Produto não encontrado!']);
 
     }
 
@@ -93,8 +94,8 @@ class ProdutosController extends Controller
     {
         $produto = $this->produtosService->deleteProduto($id);
         if($produto){
-            return response()->json(['message' => 'Produto deletado com sucesso!']);
+            return response()->json(['success' => true, 'message' => 'Produto deletado com sucesso!']);
         }
-        return response()->json(['message' => 'Produto não encontrado!']);
+        return response()->json(['success' => false, 'message' => 'Produto não encontrado!']);
     }
 }
