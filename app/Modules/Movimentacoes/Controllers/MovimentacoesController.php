@@ -58,14 +58,14 @@ class MovimentacoesController{
         $validateData['usuario_id'] = $usuarioId;
 
         if($validateData['tipo'] === 'entrada'){
-            $movimentacao = $this->movimentacoesService->entrada($validateData);
+            $movimentacao = $this->movimentacoesService->registrarEntrada($validateData);
             if($movimentacao){
                 return response()->json(['success' => true, 'message' => 'Movimentação registrada com sucesso!', 'data' => $movimentacao], 200);
             }
         }
 
         if($validateData['tipo'] === 'saida'){
-            $movimentacao = $this->movimentacoesService->saida($validateData);
+            $movimentacao = $this->movimentacoesService->registrarSaida($validateData);
             if($movimentacao){
                 return response()->json(['success' => true, 'message' => 'Movimentação registrada com sucesso!', 'data' => $movimentacao], 200);
             }

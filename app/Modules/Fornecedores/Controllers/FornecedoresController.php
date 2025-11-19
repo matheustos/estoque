@@ -3,6 +3,7 @@ namespace App\Modules\Fornecedores\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Modules\Fornecedores\Services\FornecedoresService;
+use App\Retorno\Retorno;
 
 class FornecedoresController extends Controller
 {
@@ -22,13 +23,10 @@ class FornecedoresController extends Controller
         return response()->json(['message' => 'Nenhum fornecedor encontrado'], 404);
     }
 
-    public function quantidadeFornecedores(){
-        $fornecedoresGeral = $this->fornecedoresService->todosFornecedores();
-        $fornecedoresAtivo = $this->fornecedoresService->fornecedoresAtivo();
-        $fornecedoresInativo = $this->fornecedoresService->fornecedoresInativo();
-        $fornecedoresFavoritos = $this->fornecedoresService->fornecedoresFavoritos();
+    public function filtrarFornecedores(){
+        $fornecedores = $this->fornecedoresService->filtrarTodosFornecedores();
 
-        return response()->json(['success' => true, 'total_fornecedores' => $fornecedoresGeral, 'fornecedores_ativos' => $fornecedoresAtivo, 'fornecedores_inativos' => $fornecedoresInativo, 'fornecedores_favoritos' => $fornecedoresFavoritos], 200);
+        return Retorno::sucesso('Filtro de Fornecedores', $fornecedores, 200);
     }
 
     public function show($id){

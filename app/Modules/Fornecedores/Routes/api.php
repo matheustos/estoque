@@ -7,8 +7,8 @@ use App\Modules\Fornecedores\Controllers\FornecedoresController;
 Route::middleware('auth:api')->group(function () {
     Route::post('/fornecedores', [FornecedoresController::class, 'store']);
     Route::get('/fornecedores', [FornecedoresController::class, 'index']);
+    Route::get('/fornecedores/status', [FornecedoresController::class, 'filtrarFornecedores']);
     Route::get('/fornecedores/{id}', [FornecedoresController::class, 'show']);
-    Route::get('/fornecedores/status', [FornecedoresController::class, 'quantidadeFornecedores']);
     Route::put('/fornecedores/{id}', [FornecedoresController::class, 'update']);
     Route::delete('/fornecedores/{id}', [FornecedoresController::class, 'destroy']);
 });

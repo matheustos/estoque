@@ -17,25 +17,25 @@ class FornecedoresRepository{
         return Fornecedor::find($id);
     }
 
-    public function fornecedoresGeral(){
+    public function filtrarFornecedoresGeral(){
         $total = Fornecedor::count();
 
         return $total;
     }
 
-    public function ativos(){
+    public function filtrarAtivos(){
         $total = Fornecedor::where('status', true)->count();
 
         return $total;
     }
 
-    public function inativos(){
+    public function filtrarInativos(){
         $total = Fornecedor::where('status', false)->count();
 
         return $total;
     }
 
-    public function favoritos(){
+    public function filtrarFavoritos(){
         $total = Fornecedor::where('favorito', true)->count();
 
         return $total;

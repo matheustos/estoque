@@ -30,7 +30,7 @@ class MovimentacoesService{
         return null;
     }
 
-    public function entrada(array $data){
+    public function registrarEntrada(array $data){
         $estoque = Estoque::where('produto_id', $data['produto_id'] ?? null)
             ->lockForUpdate()
             ->first();
@@ -53,7 +53,7 @@ class MovimentacoesService{
         return null;
     }
 
-    public function saida(array $data){
+    public function registrarSaida(array $data){
         $estoque = Estoque::where('produto_id', $data['produto_id'] ?? null)
             ->lockForUpdate()
             ->first();
