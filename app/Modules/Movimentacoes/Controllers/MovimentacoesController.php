@@ -57,11 +57,21 @@ class MovimentacoesController{
         $usuarioId = JWTAuth::user()->id;
         $validateData['usuario_id'] = $usuarioId;
 
-        $movimentacao = $this->movimentacoesService->novaMovimentacao($validateData);
-
-        if($movimentacao){
-            return response()->json(['success' => true, 'message' => 'Movimentação registrada com sucesso!', 'data' => $movimentacao], 200);
+        if($validateData['tipo'] === 'entrada'){
+            $movimentacao = $this->movimentacoesService->entrada($validateData);
+            if($movimentacao){
+                return response()->json(['success' => true, 'message' => 'Movimentação registrada com sucesso!', 'data' => $movimentacao], 200);
+            }
         }
+
+        if($validateData['tipo'] === 'saida'){
+            $movimentacao = $this->movimentacoesService->saida($validateData);
+            if($movimentacao){
+                return response()->json(['success' => true, 'message' => 'Movimentação registrada com sucesso!', 'data' => $movimentacao], 200);
+            }
+        }
+
+        
         return response()->json(['success' => false, 'message' => 'Erro ao registrar movimentação!'], 500);
     }
 

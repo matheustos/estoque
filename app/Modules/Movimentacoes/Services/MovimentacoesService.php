@@ -30,7 +30,7 @@ class MovimentacoesService{
         return null;
     }
 
-    public function novaMovimentacao(array $data){
+    public function entrada(array $data){
         $estoque = Estoque::where('produto_id', $data['produto_id'] ?? null)
             ->lockForUpdate()
             ->first();
@@ -41,14 +41,25 @@ class MovimentacoesService{
             // se for entrada, atualiza o campo compras do fornecedor
             $fornecedor = Fornecedor::find($data['fornecedor_id'] ?? null);
             if($fornecedor){
-                $fornecedor->increment('compras', $data['quantidade']);
+                $fornecedor->increment('compras', 1);
             }
         }
 
-        if($data['tipo'] === 'saida'){
-            $saldoDepois = $saldoAntes - $data['quantidade'];
-            $estoque->update(['quantidade' => $saldoDepois]);
+        $movimentacao = $this->movimentacoesRepository->cadastrar($data);
+
+        if($movimentacao){
+            return $movimentacao;
         }
+        return null;
+    }
+
+    public function saida(array $data){
+        $estoque = Estoque::where('produto_id', $data['produto_id'] ?? null)
+            ->lockForUpdate()
+            ->first();
+        $saldoAntes = $estoque->quantidade;
+        $saldoDepois = $saldoAntes - $data['quantidade'];
+        $estoque->update(['quantidade' => $saldoDepois]);
 
         $movimentacao = $this->movimentacoesRepository->cadastrar($data);
 
