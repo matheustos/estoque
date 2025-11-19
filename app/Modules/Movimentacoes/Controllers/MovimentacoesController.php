@@ -2,6 +2,7 @@
 
 namespace App\Modules\Movimentacoes\Controllers;
 use App\Modules\Movimentacoes\Services\MovimentacoesService;
+use App\Retorno\Retorno;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Modules\Estoque\Models\Estoque;
@@ -17,9 +18,9 @@ class MovimentacoesController{
         $movimentacoes = $this->movimentacoesService->buscarTodos();
 
         if($movimentacoes){
-            return response()->json(['success' => true, 'message' => 'Histórico de movimentações:', 'data' => $movimentacoes], 200);
+            return Retorno::sucesso('Movimentações encontradas com sucesso!', $movimentacoes, 200);
         }
-        return response()->json(['success' => false, 'message' => 'Nenhuma movimentação encontrada!'], 404);
+        return Retorno::erro('Nenhuma movimentação encontrada!', 404);
     }
 
     public function show($id){
@@ -48,11 +49,11 @@ class MovimentacoesController{
         $saldo = $estoque->quantidade;
 
         if($validateData['quantidade'] > $saldo && $validateData['tipo'] === 'saida'){
-            return response()->json(['success' => false, 'message' => 'A quantidade não pode ser superior ao estoque!'], 500);
+            return Retorno::erro('A quantidade não pode ser superior ao estoque!', 500);
         }
 
         if($validateData['quantidade'] <= 0){
-            return response()->json(['success' => false, 'message' => 'A quantidade deve ser maior que zero!'], 500);
+            return Retorno::erro('A quantidade deve ser maior que zero!', 500);
         }
         $usuarioId = JWTAuth::user()->id;
         $validateData['usuario_id'] = $usuarioId;
@@ -60,19 +61,18 @@ class MovimentacoesController{
         if($validateData['tipo'] === 'entrada'){
             $movimentacao = $this->movimentacoesService->registrarEntrada($validateData);
             if($movimentacao){
-                return response()->json(['success' => true, 'message' => 'Movimentação registrada com sucesso!', 'data' => $movimentacao], 200);
+                return Retorno::sucesso('Movimentação registrada com sucesso!', $movimentacao, 200);
             }
         }
 
         if($validateData['tipo'] === 'saida'){
             $movimentacao = $this->movimentacoesService->registrarSaida($validateData);
             if($movimentacao){
-                return response()->json(['success' => true, 'message' => 'Movimentação registrada com sucesso!', 'data' => $movimentacao], 200);
+                return Retorno::sucesso('Movimentação registrada com sucesso!', $movimentacao, 200);
             }
         }
 
-        
-        return response()->json(['success' => false, 'message' => 'Erro ao registrar movimentação!'], 500);
+        return Retorno::erro('Erro ao registrar movimentação!', 500);
     }
 
     public function update(Request $request, $id){
@@ -86,7 +86,7 @@ class MovimentacoesController{
         ]);
 
         if($validateData['tipo'] != 'ajuste'){
-            return response()->json(['success'=> false, 'message' => 'Para editar uma movimentação, faça um ajuste manual!']);
+            return Retorno::erro('Apenas movimentações do tipo ajuste podem ser atualizadas!', 500);
         }
 
         $estoque = Estoque::where('produto_id', $validateData['produto_id'] ?? null)
@@ -98,7 +98,7 @@ class MovimentacoesController{
         if($validateData['quantidade'] < 0){
             // verifica se a diferença do saldo atual e a quantidade que saiu é menor que zero
             if($saldo + $validateData['quantidade'] < 0){
-                return response()->json(['success' => false, 'message' => 'A quantidade não pode ser superior ao estoque!'], 500);
+                return Retorno::erro('A quantidade não pode ser superior ao estoque!', 500);
             }
         }
         $usuarioId = JWTAuth::user()->id;
@@ -107,17 +107,17 @@ class MovimentacoesController{
         $movimentacao = $this->movimentacoesService->atualizarMovimentacao($id, $validateData);
 
         if($movimentacao){
-            return response()->json(['success' => true, 'message' => 'Movimentação atualizada com sucesso!', 'data' => $movimentacao], 200);
+            return Retorno::sucesso('Movimentação atualizada com sucesso!', $movimentacao, 200);
         }
-        return response()->json(['success' => false, 'message' => 'Erro ao atualizar movimentação!'], 500);
+        return Retorno::erro('Erro ao atualizar movimentação!', 500);
     }
 
     public function destroy($id){
         $movimentacao = $this->movimentacoesService->deletarMovimentacao($id);
 
         if($movimentacao){
-            return response()->json(['success' => true, 'message' => 'Movimentação deletada com sucesso!'], 200);
+            return Retorno::sucesso('Movimentação deletada com sucesso!', null, 200);
         }
-        return response()->json(['success' => false, 'message' => 'Erro ao deletar movimentação!'], 500);
+        return Retorno::erro('Erro ao deletar movimentação!', 500);
     }
 }

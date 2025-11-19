@@ -11,27 +11,19 @@ class DashboardService{
         $this->dashboardRepository = $dashboardRepository;
     }
 
-    public function todosProdutos(){
-        $produtos = $this->dashboardRepository->produtosGeral();
-
-        return $produtos;
-    }
-
-    public function produtosFalta(){
-        $produtos = $this->dashboardRepository->falta();
-
-        return $produtos;
-    }
-
-    public function movimentacoesSemana(){
+    public function filtrarDadosCards(){
         $inicioSemana = Carbon::now()->startOfWeek(Carbon::SUNDAY);
         $fimSemana = Carbon::now()->endOfWeek(Carbon::SUNDAY);
 
-        $movimentacoes = $this->dashboardRepository->movimentacoes($inicioSemana, $fimSemana);
-        if($movimentacoes){
-            return $movimentacoes;
-        }
-        return null;
+        $movimentacoes = $this->dashboardRepository->filtrarMovimentacoes($inicioSemana, $fimSemana);
+        $produtosFalta = $this->dashboardRepository->filtrarFalta();
+        $totalProdutos = $this->dashboardRepository->filtrarProdutosGeral();
+
+        return [
+            'total_produtos' => $totalProdutos,
+            'produtos_falta' => $produtosFalta,
+            'movimentacoes_semana' => $movimentacoes
+        ];
     }
 
     public function alertasEstoque(){

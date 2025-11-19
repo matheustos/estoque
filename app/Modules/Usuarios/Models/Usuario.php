@@ -49,4 +49,9 @@ class Usuario extends Authenticatable implements JWTSubject
             ->timezone('America/Sao_Paulo')
             ->format('Y-m-d H:i:s');
     }
+
+    public function papel()
+    {
+        return $this->belongsTo(\App\Modules\Papeis\Models\Papel::class, 'papel_id');
+    }
 }

@@ -3,6 +3,7 @@ namespace App\Modules\Estoque\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Estoque\Services\EstoquesService;
 use Illuminate\Http\Request;
+use App\Retorno\Retorno;
 
 class EstoquesController extends Controller{
     protected $estoquesService;
@@ -15,18 +16,18 @@ class EstoquesController extends Controller{
         $estoques = $this->estoquesService->buscarTodos();
 
         if($estoques){
-            return response()->json(['success' => true, 'message' => 'Produtos encontrados:', 'data' => $estoques], 200);
+            return Retorno::sucesso('Produtos encontrados:', $estoques, 200);
         }
-        return response()->json(['success' => false, 'message' => 'Estoque vazio'], 404);
+        return Retorno::erro('Estoque vazio', 404);
     }
 
     public function show($id){
         $estoque = $this->estoquesService->buscarPorId($id);
 
         if($estoque){
-            return response()->json(['success' => true, 'message' => 'Produtos encontrado:', 'data' => $estoque], 200);
+            return Retorno::sucesso('Estoque encontrado:', $estoque, 200);
         }
-        return response()->json(['success' => false, 'message' => 'Estoque vazio'], 404);
+        return Retorno::erro('Estoque não encontrado', 404);
     }
 
     public function store(Request $request){
@@ -45,9 +46,9 @@ class EstoquesController extends Controller{
         $estoque = $this->estoquesService->cadastrarEstoque($validateData);
 
         if($estoque){
-            return response()->json(['success' => true, 'message' => 'Estoque cadastrado com sucesso!', 'data' => $estoque], 200);
+            return Retorno::sucesso('Estoque cadastrado com sucesso!', $estoque, 201);
         }
-        return response()->json(['success' => false, 'message' => 'Erro ao cadastrar estoque!'], 500);
+        return Retorno::erro('Erro ao cadastrar estoque!', 500);
     }
 
     public function update(Request $request, $id){
@@ -65,17 +66,17 @@ class EstoquesController extends Controller{
         $estoque = $this->estoquesService->atualizarEstoque($validateData, $id);
 
         if($estoque){
-            return response()->json(['success' => true, 'message' => 'Estoque atualizado com sucesso!', 'data' => $estoque], 200);
+            return Retorno::sucesso('Estoque atualizado com sucesso!', $estoque, 200);
         }
-        return response()->json(['success' => false, 'message' => 'Erro ao atualizar estoque!'], 500);
+        return Retorno::erro('Erro ao atualizar estoque!', 500);
     }
 
     public function destroy($id){
         $estoque = $this->estoquesService->deletarEstoque($id);
 
         if($estoque){
-            return response()->json(['success' => true, 'message' => 'Estoque deletado com sucesso!'], 200);
+            return Retorno::sucesso('Estoque deletado com sucesso!', null, 200);
         }
-        return response()->json(['success' => false, 'message' => 'Erro ao deletar estoque!'], 500);
+        return Retorno::erro('Erro ao deletar estoque!', 500);
     }
 }

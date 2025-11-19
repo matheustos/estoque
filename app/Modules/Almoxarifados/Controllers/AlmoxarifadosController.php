@@ -4,7 +4,7 @@ namespace App\Modules\Almoxarifados\Controllers;
 use App\Modules\Almoxarifados\Services\AlmoxarifadosService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Modules\Empresas\Models\Empresa;
+use App\Retorno\Retorno;
 
 class AlmoxarifadosController extends Controller{
     
@@ -16,7 +16,7 @@ class AlmoxarifadosController extends Controller{
 
     public function store(Request $request){
         $validateData = $request->validate([
-            'empresa_id' => 'required|integer|max: 100',
+            'empresa_id' => 'required|integer|exists:empresas,id',
             'nome' => 'required|string|max: 255',
             'endereco' => 'required|string|max: 255'
         ]);
@@ -24,61 +24,54 @@ class AlmoxarifadosController extends Controller{
         $almoxarifado = $this->almoxarifadosService->cadastrarAlmoxarifado($validateData);
 
         if($almoxarifado){
-            return response()->json(['success' => true, 'message' => 'Almoxarifado cadastrado com sucesso!', 'data' => $almoxarifado], 200);
+            return Retorno::sucesso('Almoxarifado cadastrado com sucesso!', $almoxarifado, 200);
         }
 
-        return response()->json(['success' => false, 'message' => 'Erro ao cadastrar almoxarifado'], 500);
+        return Retorno::erro('Erro ao cadastrar almoxarifado!', 500);
     }
 
     public function index(){
         $almoxarifados = $this->almoxarifadosService->buscarTodos();
 
         if($almoxarifados){
-            return response()->json(['success' => true, 'message' => 'Almoxarifados encontrados:', 'data' => $almoxarifados], 200);
+            return Retorno::sucesso('Almoxarifados encontrados:', $almoxarifados, 200);
         }
 
-        return response()->json(['success' => false, 'message' => 'Nenhum almoxarifado encontrado!'], 404);
+        return Retorno::erro('Nenhum almoxarifado encontrado!', 404);
     }
 
     public function show($id){
         $almoxarifado = $this->almoxarifadosService->buscarPorId($id);
 
         if($almoxarifado){
-            return response()->json(['success' => true, 'message' => 'Almoxarifado encontrado:', 'data' => $almoxarifado], 200);
+            return Retorno::sucesso('Almoxarifado encontrado:', $almoxarifado, 200);
         }
 
-        return response()->json(['success' => false, 'message' => 'Nenhum almoxarifado encontrado!'], 404);
+        return Retorno::erro('Nenhum almoxarifado encontrado!', 404);
     }
 
     public function update(Request $request, $id){
         $validateData = $request->validate([
-            'empresa_id' => 'sometimes|integer|max: 100',
+            'empresa_id' => 'sometimes|integer|exists:empresas,id',
             'nome' => 'sometimes|string|max: 255',
             'endereco' => 'sometimes|string|max: 255'
         ]);
-
-        if($request["empresa_id"]){
-            $empresa = Empresa::find($request["empresa_id"]);
-            if(!$empresa){
-                return response()->json(['success' => false, 'message' => 'Não existe empresa com esse id!'], 404);
-            }
-        }
         
         $almoxarifado = $this->almoxarifadosService->atualizarAlmoxarifado($validateData, $id);
 
         if($almoxarifado){
-            return response()->json(['success' => true, 'message' => 'Almoxarifado atualizado com sucesso!', 'data' => $almoxarifado], 200);
+            return Retorno::sucesso('Almoxarifado atualizado com sucesso!', $almoxarifado, 200);
         }
 
-        return response()->json(['success' => false, 'message' => 'Nenhum almoxarifado encontrado!'], 404);
+        return Retorno::erro('Erro ao atualizar almoxarifado!', 500);
     }
 
     public function destroy($id)
     {
         $produto = $this->almoxarifadosService->deleteAlmoxarifado($id);
         if($produto){
-            return response()->json(['message' => 'Almoxarifado deletado com sucesso!']);
+            return Retorno::sucesso('Almoxarifado deletado com sucesso!', null, 200);
         }
-        return response()->json(['message' => 'Almoxarifado não encontrado!']);
+        return Retorno::erro('Erro ao deletar almoxarifado!', 500);
     }
 }

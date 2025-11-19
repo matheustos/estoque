@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Modules\Usuarios\Models\Usuario;
 use App\Modules\Usuarios\Services\UsuariosService;
+use App\Retorno\Retorno;
+use App\Modules\Papeis\Models\Papel;
 
 class AuthController extends Controller
 {
@@ -19,20 +21,20 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $data = $request->validate([
+        $validateData = $request->validate([
             'empresa_id' => 'nullable|integer|exists:empresas,id',
-            'papel_id' => 'nullable|integer|exists:papeis,id',
+            'papel_id' => 'required|integer|max:255',
             'nome'  => 'required|string|max:255',
             'email' => 'required|email|unique:usuarios',
             'password' => 'required|min:6',
         ]);
 
-        if(!$request->role){
-            $data['role'] = 'user';
-        }
-
-        $usuario = Usuario::create($data);
-        return response()->json($usuario, 201);
+        $papel = Papel::where('empresa_id', $validateData['empresa_id'])
+            ->where('id', $validateData['papel_id'])
+            ->first();
+        $validateData['role'] = $papel->nome;
+        $usuario = Usuario::create($validateData);
+        return Retorno::sucesso('Usuário registrado com sucesso', $usuario, 201);
     }
 
     public function login(Request $request)
@@ -40,7 +42,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Credenciais inválidas'], 401);
+            return Retorno::erro('Credenciais inválidas', 401);
         }
 
         return $this->respondWithToken($token);
@@ -48,13 +50,13 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response()->json(JWTAuth::user()->id);
+        return Retorno::sucesso('Usuário autenticado', JWTAuth::user(), 200);
     }
 
     public function logout()
     {
         JWTAuth::invalidate(JWTAuth::getToken());
-        return response()->json(['message' => 'Logout realizado com sucesso']);
+        return Retorno::sucesso('Logout realizado com sucesso', null, 200);
     }
 
     public function resetPassword(Request $request){
@@ -65,9 +67,9 @@ class AuthController extends Controller
         $senhaAtualizada = $this->usuariosService->resetarSenha($validatedData['email']);
 
         if($senhaAtualizada){
-            return response()->json(['message' => 'Nova senha enviado por email!', 'usuário' => $senhaAtualizada], 200);
+            return Retorno::sucesso('Senha resetada com sucesso! Verifique seu email.', $senhaAtualizada, 200);
         } else {
-            return response()->json(['message' => 'Usuário não encontrado'], 404);
+            return Retorno::erro('Usuário não encontrado', 404);
         }
     }
 
@@ -83,9 +85,9 @@ class AuthController extends Controller
         $senhaAtualizada = $this->usuariosService->resetarSenhaLogado($validatedData['email'], $validatedData['password']);
 
         if ($senhaAtualizada) {
-            return response()->json(['message' => 'Senha atualizada com sucesso!', 'usuário' => $senhaAtualizada], 200);
+            return Retorno::sucesso('Senha atualizada com sucesso!', null, 200);
         } else {
-            return response()->json(['message' => 'Usuário não encontrado'], 404);
+            return Retorno::erro('Usuário não encontrado', 404);
         }
     }
 

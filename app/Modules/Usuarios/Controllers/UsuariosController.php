@@ -3,6 +3,7 @@ namespace App\Modules\Usuarios\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Usuarios\Services\UsuariosService;
 use Illuminate\Http\Request;
+use App\Retorno\Retorno;
 
 class UsuariosController extends Controller
 {
@@ -16,9 +17,9 @@ class UsuariosController extends Controller
     public function index(){
         $usuarios = $this->usuariosService->listarUsuarios();
         if($usuarios){
-            return response()->json($usuarios, 200);
+            return Retorno::sucesso('Lista de usuários obtida com sucesso', $usuarios, 200);
         } else {
-            return response()->json(['message' => 'Nenhum usuário encontrado'], 404);
+            return Retorno::erro('Nenhum usuário encontrado', 404);
         }
     }
 
@@ -26,9 +27,9 @@ class UsuariosController extends Controller
         $usuario = $this->usuariosService->pegarUsuarioPorId($id);
 
         if($usuario){
-            return response()->json($usuario, 200);
+            return Retorno::sucesso('Usuário obtido com sucesso', $usuario, 200);
         } else {
-            return response()->json(['message' => 'Usuário não encontrado'], 404);
+            return Retorno::erro('Usuário não encontrado', 404);
         }
     }
 
@@ -43,9 +44,9 @@ class UsuariosController extends Controller
         $usuario = $this->usuariosService->atualizarUsuario($id, $validatedData);
 
         if($usuario){
-            return response()->json($usuario, 200);
+            return Retorno::sucesso('Usuário atualizado com sucesso', $usuario, 200);
         } else {
-            return response()->json(['message' => 'Usuário não encontrado'], 404);
+            return Retorno::erro('Usuário não encontrado ou dados inválidos', 404);
         }
     }
 
@@ -53,9 +54,9 @@ class UsuariosController extends Controller
         $usuario = $this->usuariosService->deletarUsuario($id);
 
         if($usuario){
-            return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
+            return Retorno::sucesso('Usuário deletado com sucesso', null, 200);
         }
-        return response()->json(['message' => 'Usuário não encontrado'], 404);
+        return Retorno::erro('Usuário não encontrado', 404);
     }
 
     

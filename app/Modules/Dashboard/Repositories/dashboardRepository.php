@@ -6,19 +6,19 @@ use App\Modules\Produtos\Models\Produto;
 use App\Modules\Movimentacoes\Models\Movimentacao;
 
 class DashboardRepository{
-    public function produtosGeral(){
+    public function filtrarProdutosGeral(){
         $total = Produto::count();
 
         return $total;
     }
 
-    public function falta(){
+    public function filtrarFalta(){
         $total = Estoque::where('quantidade', 0)->count();
 
         return $total;
     }
 
-    public function movimentacoes($inicio, $fim){
+    public function filtrarMovimentacoes($inicio, $fim){
         $movimentacao = Movimentacao::whereBetween('data_movimentacao', [$inicio, $fim])->count();
 
         return $movimentacao;

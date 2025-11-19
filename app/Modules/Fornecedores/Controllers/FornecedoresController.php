@@ -18,9 +18,9 @@ class FornecedoresController extends Controller
         $fornecedores = $this->fornecedoresService->buscarTodosFornecedores();
 
         if($fornecedores){
-            return response()->json(['message' => 'Fornecedores Encontrados:', 'fornecedores' => $fornecedores], 200);
+            return Retorno::sucesso('Lista de Fornecedores', $fornecedores, 200);
         }
-        return response()->json(['message' => 'Nenhum fornecedor encontrado'], 404);
+        return Retorno::erro('Nenhum fornecedor encontrado', 404);
     }
 
     public function filtrarFornecedores(){
@@ -32,9 +32,9 @@ class FornecedoresController extends Controller
     public function show($id){
         $fornecedor = $this->fornecedoresService->buscarFornecedor($id);
         if($fornecedor){
-            return response()->json(['Fornecedor Encontrado:' => $fornecedor], 200);
+            return Retorno::sucesso('Detalhes do Fornecedor', $fornecedor, 200);
         }
-        return response()->json(['message' => 'Nenhum fornecedor encontrado'], 404);
+        return Retorno::erro('Fornecedor não encontrado', 404);
     }
 
     public function store(Request $request){
@@ -54,9 +54,9 @@ class FornecedoresController extends Controller
         $fornecedor = $this->fornecedoresService->cadastrarForncedores($validatedData);
 
         if($fornecedor){
-            return response()->json(['message' => 'Fornecedor cadastrado com sucesso!', 'fornecedor' => $fornecedor], 200);
+            return Retorno::sucesso('Fornecedor cadastrado com sucesso!', $fornecedor, 200);
         }
-        return response()->json(['message' => 'Erro ao cadastrar fornecedor!'], 500);
+        return Retorno::erro('Falha ao cadastrar fornecedor', 500);
     }
 
     public function update(Request $request, $id){
@@ -72,17 +72,17 @@ class FornecedoresController extends Controller
         $fornecedor = $this->fornecedoresService->updateFornecedor($validatedData, $id);
 
         if($fornecedor){
-            return response()->json(['message' => 'Fornecedor atualizado com sucesso!', 'fornecedor' => $fornecedor], 200);
+            return Retorno::sucesso('Fornecedor atualizado com sucesso!', $fornecedor, 200);
         }
-        return response()->json(['message' => 'Falha ao atualizar fornecedor'], 500);
+        return Retorno::erro('Fornecedor não encontrado', 404);
     }
 
     public function destroy($id){
         $fornecedor = $this->fornecedoresService->deleteFornecedor($id);
 
         if(!$fornecedor){
-            return response()->json(['message'=> 'Fornecedor não encontrado!'], 404);
+            return Retorno::erro('Fornecedor não encontrado', 404);
         }
-        return response()->json(['message'=> 'Fornecedor deletado com sucesso!'], 200);
+        return Retorno::sucesso('Fornecedor deletado com sucesso!', null, 200);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Modules\Categorias\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Modules\Categorias\Services\CategoriasService;
+use App\Retorno\Retorno;
 
 class CategoriasController extends Controller{
     protected $categoriasService;
@@ -21,39 +22,27 @@ class CategoriasController extends Controller{
         $categoria = $this->categoriasService->cadastrarCategoria($validateData);
 
         if($categoria){
-            return response()->json([
-                'success' => true, 'message' => 'Categoria cadastrada com sucesso!', 'data' => $categoria
-            ], 200);
+            return Retorno::sucesso('Categoria cadastrada com sucesso!', $categoria, 200);
         }
-        return response()->json([
-            'success' => false, 'message' => 'Erro ao cadastrar categoria!'
-        ], 500);
+        return Retorno::erro('Erro ao cadastrar categoria!', 500);
     }
 
     public function index(){
         $categorias = $this->categoriasService->buscarTodos();
 
         if($categorias){
-            return response()->json([
-                'success' => true, 'message' => 'Categorias encontradas:', 'data' => $categorias
-            ], 200);
+            return Retorno::sucesso('Categorias encontradas:', $categorias, 200);
         }
-        return response()->json([
-            'success' => false, 'message' => 'Nenhuma catergoria encontrada!'
-        ], 404);
+        return Retorno::erro('Nenhuma categoria encontrada!', 404);
     }
 
     public function show($id){
         $categoria = $this->categoriasService->buscar($id);
 
         if($categoria){
-            return response()->json([
-                'success' => true, 'message' => 'Categoria encontrada:', 'data' => $categoria
-            ], 200);
+            return Retorno::sucesso('Categoria encontrada:', $categoria, 200);
         }
-        return response()->json([
-            'success' => false, 'message' => 'Nenhuma catergoria encontrada!'
-        ], 404);
+        return Retorno::erro('Categoria não encontrada!', 404);
     }
 
     public function update(Request $request, $id){
@@ -64,25 +53,17 @@ class CategoriasController extends Controller{
         $categoria = $this->categoriasService->atualizarCategoria($validateData, $id);
 
         if($categoria){
-            return response()->json([
-                'success' => true, 'message' => 'Categoria atualizada com sucesso!', 'data' => $categoria
-            ], 200);
+            return Retorno::sucesso('Categoria atualizada com sucesso!', $categoria, 200);
         }
-        return response()->json([
-            'success' => false, 'message' => 'Erro ao atualizar categoria!'
-        ], 500);
+        return Retorno::erro('Erro ao atualizar categoria!', 500);
     }
 
     public function destroy($id){
         $categoria = $this->categoriasService->deletarCategoria($id);
 
         if($categoria){
-            return response()->json([
-                'success' => true, 'message' => 'Categoria deletada com sucesso!'
-            ], 200);
+            return Retorno::sucesso('Categoria deletada com sucesso!', null, 200);
         }
-        return response()->json([
-            'success' => false, 'message' => 'Erro ao deletar categoria!'
-        ], 500);
+        return Retorno::erro('Erro ao deletar categoria!', 500);
     }
 }
