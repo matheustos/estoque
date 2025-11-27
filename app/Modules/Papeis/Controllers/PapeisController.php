@@ -18,7 +18,7 @@ class PapeisController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-            'empresa_id' => 'required|integer|exists:empresas,id',
+            'empresa_id' => 'nullable|integer|exists:empresas,id',
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string',
         ]);
@@ -26,8 +26,8 @@ class PapeisController extends Controller
         $papel = $this->papeisService->criarPapel($validateData);
 
         if($papel){
-            Retorno::sucesso('Papel criado com sucesso', $papel, 200);
+            return Retorno::sucesso('Papel criado com sucesso', $papel, 200);
         }
-        Retorno::erro('Falha ao criar papel', 500);
+        return Retorno::erro('Falha ao criar papel', 500);
     }
 }
