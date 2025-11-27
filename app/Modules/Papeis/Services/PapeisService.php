@@ -12,8 +12,9 @@ class PapeisService
         $this->papeisRepository = $papeisRepository;
     }
 
-    public function criarPapel($data)
+    public function criarPapel(array $data)
     {
-        return $this->papeisRepository->criarPapel($data);
+        $papel = $this->papeisRepository->criarPapel($data);
+        return $papel;
     }
 }

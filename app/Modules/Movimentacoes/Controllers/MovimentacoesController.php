@@ -23,15 +23,6 @@ class MovimentacoesController{
         return Retorno::erro('Nenhuma movimentação encontrada!', 404);
     }
 
-    public function show($id){
-        $movimentacao = $this->movimentacoesService->buscarPorId($id);
-
-        if($movimentacao){
-            return response()->json(['success' => true, 'data' => $movimentacao], 200);
-        }
-        return response()->json(['success' => false, 'message' => 'Nenhuma movimentação encontrada!'], 404);
-    }
-
     public function store(Request $request){
         $validateData = $request->validate([
             'produto_id' => 'required|integer|exists:produtos,id',

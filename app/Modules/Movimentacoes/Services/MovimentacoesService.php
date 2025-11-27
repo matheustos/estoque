@@ -21,15 +21,6 @@ class MovimentacoesService{
         return null;
     }
 
-    public function buscarPorId($id){
-        $movimentacao = $this->movimentacoesRepository->buscar($id);
-
-        if($movimentacao){
-            return $movimentacao;
-        }
-        return null;
-    }
-
     public function registrarEntrada(array $data){
         $estoque = Estoque::where('produto_id', $data['produto_id'] ?? null)
             ->lockForUpdate()

@@ -5,6 +5,8 @@ namespace App\Modules\Usuarios\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Carbon\Carbon;
+use App\Modules\Papeis\Models\Papel;
+use App\Modules\Empresas\Models\Empresa;
 
 class Usuario extends Authenticatable implements JWTSubject
 {
@@ -15,11 +17,11 @@ class Usuario extends Authenticatable implements JWTSubject
         'papel_id',
         'nome',
         'email',
-        'password',
-        'role', // admin ou user
+        'password'
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'empresa', 'papel', 'empresa_id', 'papel_id', 'created_at', 'updated_at'];
+    protected $appends = ['papel_nome', 'empresa_nome'];
 
     public function getJWTIdentifier()
     {
@@ -52,6 +54,29 @@ class Usuario extends Authenticatable implements JWTSubject
 
     public function papel()
     {
-        return $this->belongsTo(\App\Modules\Papeis\Models\Papel::class, 'papel_id');
+        return $this->belongsTo(Papel::class, 'papel_id');
     }
+
+    public function hasPermission($permissao_nome)
+    {
+        return $this->papel
+            ->permissoes
+            ->contains('nome', $permissao_nome);
+    }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
+
+    public function getEmpresaNomeAttribute()
+    {
+        return $this->empresa->nome ?? null;
+    }
+
+    public function getPapelNomeAttribute()
+    {
+        return $this->papel->nome ?? null;
+    }
+
 }

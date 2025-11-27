@@ -9,4 +9,9 @@ class PapeisRepository
     {
         return Papel::create($data);
     }
+
+    public function obterPapelPorId($id)
+    {
+        return Papel::find($id);
+    }
 }

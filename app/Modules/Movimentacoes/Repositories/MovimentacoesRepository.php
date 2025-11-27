@@ -11,12 +11,6 @@ class MovimentacoesRepository{
         return $movimentacoes;
     }
 
-    public function buscar($id){
-        $movimentacao = Movimentacao::find($id);
-
-        return $movimentacao;
-    }
-
     public function cadastrar($data){
         $movimentacao = Movimentacao::create($data);
 
