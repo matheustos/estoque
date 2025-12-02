@@ -79,4 +79,13 @@ class EstoquesController extends Controller{
         }
         return Retorno::erro('Erro ao deletar estoque!', 500);
     }
+
+    public function alertasEstoqueGeral(){
+        $alertas = $this->estoquesService->alertasEstoque();
+
+        if($alertas){
+            return Retorno::sucesso('Alertas de estoque encontrados com sucesso!', $alertas, 200);
+        }
+        return Retorno::erro('Nenhum alerta de estoque encontrado.', 404);
+    }
 }

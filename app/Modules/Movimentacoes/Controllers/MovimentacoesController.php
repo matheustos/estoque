@@ -111,4 +111,13 @@ class MovimentacoesController{
         }
         return Retorno::erro('Erro ao deletar movimentação!', 500);
     }
+
+    public function buscarMovimentacoesSemana(){
+        $movimentacoes = $this->movimentacoesService->buscarMovimentacoesPorIntervalo();
+
+        if($movimentacoes){
+            return Retorno::sucesso('Movimentações da semana encontradas com sucesso!', $movimentacoes, 200);
+        }
+        return Retorno::erro('Nenhuma movimentação encontrada na semana!', 404);
+    }
 }

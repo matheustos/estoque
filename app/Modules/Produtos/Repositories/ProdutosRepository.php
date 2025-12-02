@@ -21,13 +21,13 @@ class ProdutosRepository
         return Produto::create($data);
     }
 
-    public function produtosGeral(){
+    public function filtrarProdutosGeral(){
         $total = Produto::count();
 
         return $total;
     }
 
-    public function falta(){
+    public function filtrarFalta(){
         $total = Estoque::where('quantidade', 0)->count();
 
         return $total;

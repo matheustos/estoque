@@ -99,4 +99,20 @@ class ProdutosController extends Controller
         }
         return Retorno::erro('Produto não encontrado', 404);
     }
+
+    public function filtrarQuantidadeProdutos(){
+        $total = $this->produtosService->filtrarProdutos();
+        if($total){
+            return Retorno::sucesso('Total de produtos obtido com sucesso', ['total_produtos' => $total], 200);
+        }
+        return Retorno::erro('Erro ao obter total de produtos', 500);
+    }
+
+    public function buscarFaltaProdutos(){
+        $total = $this->produtosService->filtrarFaltaProdutos();
+        if($total){
+            return Retorno::sucesso('Total de produtos em falta obtido com sucesso', ['total_produtos_falta' => $total], 200);
+        }
+        return Retorno::erro('Erro ao obter total de produtos em falta', 500);
+    }
 }

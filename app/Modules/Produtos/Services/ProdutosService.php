@@ -53,4 +53,20 @@ class ProdutosService
         }
         return null;
     }
+
+    public function filtrarProdutos(){
+        $total = $this->produtosRepository->filtrarProdutosGeral();
+        if($total){
+            return $total;
+        }
+        return null;
+    }
+
+    public function filtrarFaltaProdutos(){
+        $total = $this->produtosRepository->filtrarFalta();
+        if($total){
+            return $total;
+        }
+        return null;
+    }
 }

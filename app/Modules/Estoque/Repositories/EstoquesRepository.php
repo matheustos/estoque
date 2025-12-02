@@ -35,4 +35,10 @@ class EstoquesRepository{
 
         return true;
     }
+
+    public function alertas(){
+        $alertas = Estoque::whereColumn('quantidade', '<', 'quantidade_minima')->get();
+
+        return $alertas;
+    }
 }

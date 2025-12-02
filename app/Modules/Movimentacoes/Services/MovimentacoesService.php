@@ -4,6 +4,7 @@ namespace App\Modules\Movimentacoes\Services;
 use App\Modules\Movimentacoes\Repositories\MovimentacoesRepository;
 use App\Modules\Estoque\Models\Estoque;
 use App\Modules\Fornecedores\Models\Fornecedor;
+use Carbon\Carbon;
 
 class MovimentacoesService{
     protected $movimentacoesRepository;
@@ -78,6 +79,17 @@ class MovimentacoesService{
     }
     public function deletarMovimentacao($id){
         $movimentacao = $this->movimentacoesRepository->deletar($id);
+
+        if($movimentacao){
+            return $movimentacao;
+        }
+        return null;
+    }
+
+    public function buscarMovimentacoesPorIntervalo(){
+        $inicioSemana = Carbon::now()->startOfWeek(Carbon::SUNDAY);
+        $fimSemana = Carbon::now()->endOfWeek(Carbon::SUNDAY);
+        $movimentacao = $this->movimentacoesRepository->filtrarMovimentacoes($inicioSemana, $fimSemana);
 
         if($movimentacao){
             return $movimentacao;

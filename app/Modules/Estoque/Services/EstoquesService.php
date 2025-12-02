@@ -54,4 +54,13 @@ class EstoquesService{
         }
         return null;
     }
+
+    public function alertasEstoque(){
+        $alertas = $this->estoquesRepository->alertas();
+
+        if($alertas){
+            return $alertas;
+        }
+        return null;
+    }
 }

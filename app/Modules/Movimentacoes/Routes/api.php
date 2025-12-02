@@ -9,6 +9,7 @@ Route::middleware('auth:api')->group(function () {
     ->middleware('acesso:criar_movimentacoes');
     Route::get('/movimentacoes', [MovimentacoesController::class, 'index'])
     ->middleware('acesso:ver_movimentacoes');
+    Route::get('/movimentacoes/semana', [MovimentacoesController::class, 'buscarMovimentacoesSemana']);
     Route::put('/movimentacoes/{id}', [MovimentacoesController::class, 'update'])
     ->middleware('acesso:atualizar_movimentacoes');
     Route::delete('/movimentacoes/{id}', [MovimentacoesController::class, 'destroy'])

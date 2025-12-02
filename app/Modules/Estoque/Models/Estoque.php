@@ -21,7 +21,6 @@ class Estoque extends Model{
         'produto',
         'almoxarifado_id',
         'almoxarifado',
-        'quantidade_minima',
         'ultima_atualizacao'
     ];
 

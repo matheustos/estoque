@@ -36,4 +36,10 @@ class MovimentacoesRepository{
         }
         return null;
     }
+
+    public function filtrarMovimentacoes($inicio, $fim){
+        $movimentacao = Movimentacao::whereBetween('data_movimentacao', [$inicio, $fim])->count();
+
+        return $movimentacao;
+    }
 }
